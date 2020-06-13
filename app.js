@@ -27,13 +27,8 @@ app.use(async ctx => {
       // `
       ctx.body = 'running teamviewer'
 
-      const { exec, execFile } = require('child_process');
-      execFile(argv.teamviewer_path, ['--quality=2',`--id=${ctx.request.body.username}`, `--PasswordB64=${Buffer.from(ctx.request.body.password).toString('base64')}`], (error, stdout, stderr) => {
-        if (error) {
-          throw error;
-        }
-        console.log(stdout);
-      })
+      const { spawn } = require('child_process');
+      spawn(argv.teamviewer_path, ['--quality=2', `--id=${ctx.request.body.username}`, `--PasswordB64=${Buffer.from(ctx.request.body.password).toString('base64')}`], { 'detached': true })
       server.close()
       break
     default:
